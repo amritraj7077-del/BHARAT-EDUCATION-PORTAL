@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharat Education Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dark-gradient: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; 
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.05" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,133.3C960,128,1056,96,1152,90.7C1248,85,1344,107,1392,117.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .section-hidden { display: none; }
+        .section-active { display: block; animation: fadeInUp 0.6s ease-out; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-message { animation: slideInRight 0.3s ease-out; }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        .nav-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 8px;
+        }
+
+        .lab-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lab-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .lab-card:hover::before {
+            left: 100%;
+        }
+
+        .lab-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .book-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        var(--primary-gradient) border-box;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            top: 20%;
+            animation-delay: 0s;
+            border-radius: 50%;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            right: 15%;
+            top: 30%;
+            animation-delay: 2s;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            left: 70%;
+            bottom: 20%;
+            animation-delay: 4s;
+            border-radius: 50%;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-30px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(30px) rotate(240deg);
+            }
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+            }
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Floating Background Shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    <!-- Navigation -->
+    <nav class="glass-morphism sticky top-0 z-50 border-0">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-graduation-cap text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold gradient-text">Bharat Education Portal</h1>
+                        <p class="text-xs text-gray-600">Empowering Students Through Technology</p>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="showSection('home')" class="nav-btn px-4 py-2 rounded-lg text-gray-700 hover:bg-white hover:shadow-md transition-all duration-300">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </button>
+                    <button onclick="showSection('ai-chat')" class="nav-btn px-4 py-2 rounded-lg text-gray-700 hover:bg-white hover:shadow-md transition-all duration-300">
+                        <i class="fas fa-robot mr-2"></i>AI Chat
+                    </button>
+                    <button onclick="showSection('marketplace')" class="nav-btn px-4 py-2 rounded-lg text-gray-700 hover:bg-white hover:shadow-md transition-all duration-300">
+                        <i class="fas fa-store mr-2"></i>Marketplace
+                    </button>
+                    <button onclick="showSection('community')" class="nav-btn px-4 py-2 rounded-lg text-gray-700 hover:bg-white hover:shadow-md transition-all duration-300">
+                        <i class="fas fa-users mr-2"></i>Community
+                    </button>
+                    <button onclick="showSection('life-skills')" class="nav-btn px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 hover:shadow-md transition-all duration-300 font-semibold">
+                        <i class="fas fa-heart mr-2"></i>Life Skills
+                    </button>
+                    <button onclick="showSection('physics-lab')" class="nav-btn px-4 py-2 rounded-lg bg-purple-500 text-white hover:bg-purple-600 hover:shadow-md transition-all duration-300 font-semibold">
+                        <i class="fas fa-flask mr-2"></i>Lab
+                    </button>
+                    <a href="login.html" class="nav-btn px-4 py-2 rounded-lg text-gray-700 hover:bg-white hover:shadow-md transition-all duration-300">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                    <button onclick="showSection('profile')" class="nav-btn px-4 py-2 rounded-lg text-gray-700 hover:bg-white hover:shadow-md transition-all duration-300">
+                        <i class="fas fa-user-circle mr-2"></i>Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="section-active container mx-auto px-4 py-8">
+        <div class="text-center mb-16">
+            <div class="inline-block">
+                <h2 class="text-5xl font-bold text-white mb-4 animate-pulse drop-shadow-lg">Welcome to Bharat Education Portal</h2>
+                <p class="text-xl text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-md">Your comprehensive learning platform with AI assistance, interactive labs, and student marketplace</p>
+                <div class="mt-8 flex justify-center space-x-4">
+                    <button onclick="showSection('ai-chat')" class="btn-primary text-white px-8 py-3 rounded-full font-semibold shadow-lg">
+                        <i class="fas fa-robot mr-2"></i>Start Learning
+                    </button>
+                    <button onclick="showSection('marketplace')" class="bg-white/20 backdrop-blur text-white px-8 py-3 rounded-full font-semibold border border-white/30 hover:bg-white/30 transition-all">
+                        <i class="fas fa-store mr-2"></i>Browse Books
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8 mb-16">
+            <div class="feature-card glass-morphism rounded-2xl p-8 text-center group">
+                <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-robot text-white text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-gray-800">AI Assistant</h3>
+                <p class="text-gray-700 leading-relaxed">Get instant answers to your questions from our AI-powered assistant with real-time problem solving</p>
+                <div class="mt-6">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <i class="fas fa-circle text-green-500 mr-2 animate-pulse"></i>Available 24/7
+                    </span>
+                </div>
+            </div>
+            
+            <div class="feature-card glass-morphism rounded-2xl p-8 text-center group">
+                <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-flask text-white text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-gray-800">Virtual Labs</h3>
+                <p class="text-gray-700 leading-relaxed">Explore Physics, Chemistry, and Biology with interactive experiments and real-time simulations</p>
+                <div class="mt-6">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <i class="fas fa-microscope mr-2"></i>7 Experiments
+                    </span>
+                </div>
+            </div>
+            
+            <div class="feature-card glass-morphism rounded-2xl p-8 text-center group">
+                <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-book text-white text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-gray-800">Digital Library & Marketplace</h3>
+                <p class="text-gray-700 leading-relaxed">Access educational resources and buy/sell books with student credit system</p>
+                <div class="mt-6">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                        <i class="fas fa-coins mr-2"></i>Credit System
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="glass-morphism rounded-2xl p-8 mb-16">
+            <div class="grid md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-bold text-gray-800 mb-2">500+</div>
+                    <p class="text-gray-700">Active Students</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-gray-800 mb-2">50+</div>
+                    <p class="text-gray-700">Educational Resources</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-gray-800 mb-2">7</div>
+                    <p class="text-gray-700">Virtual Labs</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-gray-800 mb-2">24/7</div>
+                    <p class="text-gray-700">AI Support</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="text-center">
+            <h3 class="text-2xl font-bold text-gray-800 mb-8">Quick Actions</h3>
+            <div class="grid md:grid-cols-4 gap-4">
+                <button onclick="showSection('ai-chat')" class="glass-morphism p-6 rounded-xl hover:scale-105 transition-transform">
+                    <i class="fas fa-comments text-3xl text-blue-500 mb-3"></i>
+                    <p class="font-semibold text-gray-800">Ask AI</p>
+                </button>
+                <button onclick="showSection('labs')" class="glass-morphism p-6 rounded-xl hover:scale-105 transition-transform">
+                    <i class="fas fa-atom text-3xl text-green-500 mb-3"></i>
+                    <p class="font-semibold text-gray-800">Physics Lab</p>
+                </button>
+                <button onclick="showSection('marketplace')" class="glass-morphism p-6 rounded-xl hover:scale-105 transition-transform">
+                    <i class="fas fa-shopping-cart text-3xl text-purple-500 mb-3"></i>
+                    <p class="font-semibold text-gray-800">Buy Books</p>
+                </button>
+                <button onclick="showSellBookModal()" class="glass-morphism p-6 rounded-xl hover:scale-105 transition-transform">
+                    <i class="fas fa-plus-circle text-3xl text-orange-500 mb-3"></i>
+                    <p class="font-semibold text-gray-800">Sell Books</p>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Section -->
+    <section id="ai-chat" class="section-hidden container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="glass-morphism rounded-2xl p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center pulse-animation">
+                            <i class="fas fa-robot text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-800">AI Learning Assistant</h2>
+                            <p class="text-sm text-gray-600">Your intelligent study companion</p>
+                        </div>
+                    </div>
+                    <button onclick="configureAI()" class="btn-primary text-white px-6 py-3 rounded-full font-semibold shadow-lg">
+                        <i class="fas fa-cog mr-2"></i>Configure AI
+                    </button>
+                </div>
+                
+                <div class="bg-white/50 backdrop-blur rounded-xl h-96 overflow-y-auto p-6 mb-6 scrollbar-custom border border-white/20">
+                    <div id="chat-messages" class="space-y-4">
+                        <div class="chat-message flex items-start space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-robot text-white text-sm"></i>
+                            </div>
+                            <div class="bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl p-4 max-w-md">
+                                <p class="text-gray-800">Hello! I'm your AI learning assistant. How can I help you today? I can assist with Physics, Chemistry, Biology, Mathematics, and general study topics.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex space-x-3">
+                        <div class="flex-1 relative">
+                            <input type="text" id="user-input" placeholder="Ask your question..." 
+                                   class="w-full px-6 py-4 bg-white/70 backdrop-blur border border-white/30 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all pr-12">
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-microphone text-gray-400 hover:text-blue-500 cursor-pointer transition-colors"></i>
+                            </div>
+                        </div>
+                        <button onclick="sendMessage()" class="btn-primary text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all">
+                            <i class="fas fa-paper-plane mr-2"></i>Send
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 text-sm">
+                            <i class="fas fa-info-circle text-blue-500"></i>
+                            <span id="ai-status" class="text-gray-600">Using demo mode. Click "Configure AI" to enable full features.</span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="text-gray-400 hover:text-gray-600 transition-colors" title="Clear Chat">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="text-gray-400 hover:text-gray-600 transition-colors" title="Export Chat">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Questions -->
+            <div class="mt-8 glass-morphism rounded-2xl p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Questions</h3>
+                <div class="grid md:grid-cols-2 gap-3">
+                    <button onclick="askQuickQuestion('What is Newton\'s third law?')" class="text-left p-3 bg-white/50 rounded-lg hover:bg-white/70 transition-colors">
+                        <i class="fas fa-atom text-blue-500 mr-2"></i>
+                        <span class="text-sm text-gray-800">What is Newton's third law?</span>
+                    </button>
+                    <button onclick="askQuickQuestion('Solve: 2x² + 5x - 3 = 0')" class="text-left p-3 bg-white/50 rounded-lg hover:bg-white/70 transition-colors">
+                        <i class="fas fa-calculator text-green-500 mr-2"></i>
+                        <span class="text-sm text-gray-800">Solve: 2x² + 5x - 3 = 0</span>
+                    </button>
+                    <button onclick="askQuickQuestion('Explain photosynthesis')" class="text-left p-3 bg-white/50 rounded-lg hover:bg-white/70 transition-colors">
+                        <i class="fas fa-leaf text-green-600 mr-2"></i>
+                        <span class="text-sm text-gray-800">Explain photosynthesis</span>
+                    </button>
+                    <button onclick="askQuickQuestion('Balance: H₂ + O₂ → H₂O')" class="text-left p-3 bg-white/50 rounded-lg hover:bg-white/70 transition-colors">
+                        <i class="fas fa-flask text-purple-500 mr-2"></i>
+                        <span class="text-sm text-gray-800">Balance: H₂ + O₂ → H₂O</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Labs Section -->
+    <section id="labs" class="section-hidden container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Virtual Laboratories</h2>
+        
+        <!-- Physics Lab -->
+        <div class="mb-12">
+            <h3 class="text-2xl font-semibold text-gray-700 mb-6">
+                <i class="fas fa-atom text-blue-500 mr-3"></i>Physics Lab
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="lab-card bg-white rounded-lg shadow-lg p-6">
+                    <h4 class="text-xl font-semibold mb-3">Pendulum Motion</h4>
+                    <p class="text-gray-600 mb-4">Explore simple harmonic motion and period calculation</p>
+                    <button onclick="startPhysicsLab('pendulum')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-play mr-2"></i>Start Experiment
+                    </button>
+                </div>
+                <div class="lab-card bg-white rounded-lg shadow-lg p-6">
+                    <h4 class="text-xl font-semibold mb-3">Projectile Motion</h4>
+                    <p class="text-gray-600 mb-4">Study trajectory and velocity components</p>
+                    <button onclick="startPhysicsLab('projectile')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-play mr-2"></i>Start Experiment
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chemistry Lab -->
+        <div class="mb-12">
+            <h3 class="text-2xl font-semibold text-gray-700 mb-6">
+                <i class="fas fa-vial text-green-500 mr-3"></i>Chemistry Lab
+            </h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="lab-card bg-white rounded-lg shadow-lg p-6">
+                    <h4 class="text-xl font-semibold mb-3">Acid-Base Titration</h4>
+                    <p class="text-gray-600 mb-4">Learn about neutralization and pH indicators</p>
+                    <button onclick="startChemistryLab('titration')" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        <i class="fas fa-play mr-2"></i>Start Experiment
+                    </button>
+                </div>
+                <div class="lab-card bg-white rounded-lg shadow-lg p-6">
+                    <h4 class="text-xl font-semibold mb-3">Chemical Reactions</h4>
+                    <p class="text-gray-600 mb-4">Observe different types of chemical reactions</p>
+                    <button onclick="startChemistryLab('reactions')" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        <i class="fas fa-play mr-2"></i>Start Experiment
+                    </button>
+                </div>
+                <div class="lab-card bg-white rounded-lg shadow-lg p-6">
+                    <h4 class="text-xl font-semibold mb-3">Solutions & Concentrations</h4>
+                    <p class="text-gray-600 mb-4">Calculate molarity and prepare solutions</p>
+                    <button onclick="startChemistryLab('solutions')" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        <i class="fas fa-play mr-2"></i>Start Experiment
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biology Lab -->
+        <div class="mb-12">
+            <h3 class="text-2xl font-semibold text-gray-700 mb-6">
+                <i class="fas fa-microscope text-purple-500 mr-3"></i>Biology Lab
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="lab-card bg-white rounded-lg shadow-lg p-6">
+                    <h4 class="text-xl font-semibold mb-3">Cell Division</h4>
+                    <p class="text-gray-600 mb-4">Explore mitosis and meiosis processes</p>
+                    <button onclick="startBiologyLab('celldivision')" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">
+                        <i class="fas fa-play mr-2"></i>Start Experiment
+                    </button>
+                </div>
+                <div class="lab-card bg-white rounded-lg shadow-lg p-6">
+                    <h4 class="text-xl font-semibold mb-3">DNA Structure</h4>
+                    <p class="text-gray-600 mb-4">Understand the double helix structure</p>
+                    <button onclick="startBiologyLab('dna')" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">
+                        <i class="fas fa-play mr-2"></i>Start Experiment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Library Section -->
+    <section id="library" class="section-hidden container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Digital Library</h2>
+        
+        <div class="mb-6">
+            <div class="flex space-x-4 mb-6">
+                <button onclick="filterBooks('all')" class="px-4 py-2 bg-blue-500 text-white rounded">All Books</button>
+                <button onclick="filterBooks('physics')" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Physics</button>
+                <button onclick="filterBooks('chemistry')" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Chemistry</button>
+                <button onclick="filterBooks('biology')" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Biology</button>
+                <button onclick="filterBooks('mathematics')" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Mathematics</button>
+            </div>
+        </div>
+
+        <div id="books-grid" class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Books will be loaded here -->
+        </div>
+    </section>
+
+    <!-- Marketplace Section -->
+    <section id="marketplace" class="section-hidden container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-800">Student Marketplace</h2>
+            <button onclick="showSellBookModal()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                <i class="fas fa-plus mr-2"></i>Sell Your Book
+            </button>
+        </div>
+        
+        <div class="mb-6">
+            <div class="flex space-x-4 mb-6">
+                <button onclick="filterMarketplace('all')" class="px-4 py-2 bg-blue-500 text-white rounded">All Books</button>
+                <button onclick="filterMarketplace('textbooks')" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Textbooks</button>
+                <button onclick="filterMarketplace('novels')" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Novels</button>
+                <button onclick="filterMarketplace('notes')" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Study Notes</button>
+            </div>
+        </div>
+
+        <div id="marketplace-grid" class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Student books will be loaded here -->
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="section-hidden container mx-auto px-4 py-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Student Community</h2>
+                <p class="text-lg text-gray-600">Connect, collaborate, and learn together with fellow students</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Chat Rooms Sidebar -->
+                <div class="lg:col-span-1">
+                    <div class="glass-morphism rounded-2xl p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-gray-800">Chat Rooms</h3>
+                            <button onclick="createNewRoom()" class="btn-primary text-white px-4 py-2 rounded-full text-sm font-semibold">
+                                <i class="fas fa-plus mr-1"></i>New
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="chat-room-item bg-blue-50 rounded-lg p-3 cursor-pointer hover:bg-blue-100 transition-colors border-l-4 border-blue-500" onclick="joinChatRoom('general')">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-comments text-white text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-800">General Discussion</h4>
+                                            <p class="text-xs text-gray-600">Open to all students</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                            <i class="fas fa-circle text-green-500 mr-1 text-xs"></i>12 online
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="chat-room-item bg-green-50 rounded-lg p-3 cursor-pointer hover:bg-green-100 transition-colors border-l-4 border-green-500" onclick="joinChatRoom('study')">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-book-open text-white text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-800">Study Groups</h4>
+                                            <p class="text-xs text-gray-600">Collaborative learning</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                            <i class="fas fa-circle text-green-500 mr-1 text-xs"></i>8 online
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="chat-room-item bg-purple-50 rounded-lg p-3 cursor-pointer hover:bg-purple-100 transition-colors border-l-4 border-purple-500" onclick="joinChatRoom('physics')">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-atom text-white text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-800">Physics Help</h4>
+                                            <p class="text-xs text-gray-600">Get physics assistance</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                            <i class="fas fa-circle text-green-500 mr-1 text-xs"></i>5 online
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="chat-room-item bg-orange-50 rounded-lg p-3 cursor-pointer hover:bg-orange-100 transition-colors border-l-4 border-orange-500" onclick="joinChatRoom('math')">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-calculator text-white text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-800">Mathematics</h4>
+                                            <p class="text-xs text-gray-600">Solve problems together</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                            <i class="fas fa-circle text-green-500 mr-1 text-xs"></i>7 online
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Online Users -->
+                        <div class="border-t pt-4">
+                            <h4 class="font-semibold text-gray-800 mb-3">Online Students</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm text-gray-700">Rahul Sharma</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm text-gray-700">Priya Patel</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm text-gray-700">Amit Kumar</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                                    <span class="text-sm text-gray-700">You</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Area -->
+                <div class="lg:col-span-2">
+                    <div class="glass-morphism rounded-2xl h-[600px] flex flex-col">
+                        <!-- Chat Header -->
+                        <div class="p-6 border-b border-white/20">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div id="current-room-icon" class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-comments text-white text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 id="current-room-name" class="text-xl font-bold text-gray-800">General Discussion</h3>
+                                        <p id="current-room-desc" class="text-sm text-gray-600">Open to all students</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span id="online-count" class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
+                                        <i class="fas fa-circle text-green-500 mr-2 text-xs"></i>12 online
+                                    </span>
+                                    <button class="text-gray-400 hover:text-gray-600 transition-colors">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Messages Area -->
+                        <div id="community-messages" class="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-custom">
+                            <!-- Welcome Message -->
+                            <div class="text-center py-8">
+                                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-users text-white text-2xl"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-800 mb-2">Welcome to the Community!</h4>
+                                <p class="text-gray-600">Select a chat room to start connecting with fellow students</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Message Input -->
+                        <div class="p-6 border-t border-white/20">
+                            <div class="flex space-x-3">
+                                <div class="flex-1 relative">
+                                    <input type="text" id="community-message-input" placeholder="Type your message..." 
+                                           class="w-full px-4 py-3 bg-white/70 backdrop-blur border border-white/30 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all pr-12"
+                                           disabled>
+                                    <div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                                        <button class="text-gray-400 hover:text-blue-500 transition-colors" title="Attach file">
+                                            <i class="fas fa-paperclip"></i>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-blue-500 transition-colors" title="Send emoji">
+                                            <i class="fas fa-smile"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button id="send-community-message" onclick="sendCommunityMessage()" class="btn-primary text-white px-6 py-3 rounded-full font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                    <i class="fas fa-paper-plane mr-2"></i>Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Study Groups Section -->
+            <div class="mt-8 glass-morphism rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Active Study Groups</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-white/50 rounded-lg p-4 hover:bg-white/70 transition-colors cursor-pointer">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-semibold text-gray-800">JEE Preparation</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Physics</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">Preparing for JEE Advanced together</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex -space-x-2">
+                                <div class="w-6 h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-xs"></i>
+                                </div>
+                                <div class="w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-xs"></i>
+                                </div>
+                                <div class="w-6 h-6 bg-purple-500 rounded-full border-2 border-white flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-500">3 members</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/50 rounded-lg p-4 hover:bg-white/70 transition-colors cursor-pointer">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-semibold text-gray-800">Chemistry Club</h4>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Chemistry</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">Organic and inorganic chemistry help</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex -space-x-2">
+                                <div class="w-6 h-6 bg-orange-500 rounded-full border-2 border-white flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-xs"></i>
+                                </div>
+                                <div class="w-6 h-6 bg-pink-500 rounded-full border-2 border-white flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-500">2 members</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/50 rounded-lg p-4 hover:bg-white/70 transition-colors cursor-pointer">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-semibold text-gray-800">Math Wizards</h4>
+                            <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Mathematics</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">Problem solving and calculus</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex -space-x-2">
+                                <div class="w-6 h-6 bg-indigo-500 rounded-full border-2 border-white flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-xs"></i>
+                                </div>
+                                <div class="w-6 h-6 bg-teal-500 rounded-full border-2 border-white flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-xs"></i>
+                                </div>
+                                <div class="w-6 h-6 bg-red-500 rounded-full border-2 border-white flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-xs"></i>
+                                </div>
+                                <div class="w-6 h-6 bg-gray-400 rounded-full border-2 border-white flex items-center justify-center">
+                                    <i class="fas fa-plus text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-500">4 members</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Life Skills Lab Section -->
+    <section id="life-skills" class="section-hidden container mx-auto px-4 py-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-500 to-teal-600 rounded-full mb-4 shadow-lg">
+                    <i class="fas fa-heart text-white text-3xl"></i>
+                </div>
+                <h2 class="text-4xl font-bold gradient-text mb-4">Life Skills Lab</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Master essential real-life skills that prepare you for day-to-day tasks and future opportunities. 
+                    Interactive lessons, practical exercises, and step-by-step guides to help you become confident and independent.
+                </p>
+            </div>
+
+            <!-- Skills Categories Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- Financial Management -->
+                <div onclick="openLifeSkillModule('financial')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-wallet text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Financial Management</h3>
+                    <p class="text-gray-600 text-sm mb-4">Budgeting, savings, UPI usage, avoiding scams, smart purchasing</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">8 Lessons</span>
+                        <i class="fas fa-arrow-right text-green-500"></i>
+                    </div>
+                </div>
+
+                <!-- Digital Essentials -->
+                <div onclick="openLifeSkillModule('digital')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-laptop text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Digital Essentials</h3>
+                    <p class="text-gray-600 text-sm mb-4">Book tickets, fill forms, use apps, basic cyber safety</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">6 Lessons</span>
+                        <i class="fas fa-arrow-right text-blue-500"></i>
+                    </div>
+                </div>
+
+                <!-- Communication Skills -->
+                <div onclick="openLifeSkillModule('communication')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-comments text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Communication Skills</h3>
+                    <p class="text-gray-600 text-sm mb-4">Speak confidently, write emails, workplace etiquette</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">7 Lessons</span>
+                        <i class="fas fa-arrow-right text-purple-500"></i>
+                    </div>
+                </div>
+
+                <!-- Coding for Kids -->
+                <div onclick="openLifeSkillModule('coding')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-code text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Coding for Kids</h3>
+                    <p class="text-gray-600 text-sm mb-4">Beginner coding lessons, problem-solving, career skills</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">10 Lessons</span>
+                        <i class="fas fa-arrow-right text-orange-500"></i>
+                    </div>
+                </div>
+
+                <!-- Bargaining & Negotiation -->
+                <div onclick="openLifeSkillModule('bargaining')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-handshake text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Bargaining & Negotiation</h3>
+                    <p class="text-gray-600 text-sm mb-4">Bargain politely, compare prices, smart consumer decisions</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">5 Lessons</span>
+                        <i class="fas fa-arrow-right text-yellow-500"></i>
+                    </div>
+                </div>
+
+                <!-- Career Awareness -->
+                <div onclick="openLifeSkillModule('career')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-briefcase text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Career Awareness</h3>
+                    <p class="text-gray-600 text-sm mb-4">Skill mapping, interest finding, resume building, careers</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full">8 Lessons</span>
+                        <i class="fas fa-arrow-right text-indigo-500"></i>
+                    </div>
+                </div>
+
+                <!-- Health & Safety -->
+                <div onclick="openLifeSkillModule('health')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-red-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-heartbeat text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Health & Safety Basics</h3>
+                    <p class="text-gray-600 text-sm mb-4">First aid, emergency steps, personal safety tips</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">6 Lessons</span>
+                        <i class="fas fa-arrow-right text-red-500"></i>
+                    </div>
+                </div>
+
+                <!-- Problem-Solving Skills -->
+                <div onclick="openLifeSkillModule('problem-solving')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-lightbulb text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Life Problem-Solving</h3>
+                    <p class="text-gray-600 text-sm mb-4">Decision-making, planning, time management, critical thinking</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full">7 Lessons</span>
+                        <i class="fas fa-arrow-right text-teal-500"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Overview -->
+            <div class="glass-morphism rounded-2xl p-8 mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Your Learning Progress</h3>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <div class="relative w-20 h-20 mx-auto mb-3">
+                            <svg class="transform -rotate-90 w-20 h-20">
+                                <circle cx="40" cy="40" r="36" stroke="#e5e7eb" stroke-width="8" fill="none"></circle>
+                                <circle cx="40" cy="40" r="36" stroke="#10b981" stroke-width="8" fill="none" stroke-dasharray="226" stroke-dashoffset="90"></circle>
+                            </svg>
+                            <span class="absolute inset-0 flex items-center justify-center text-lg font-bold text-green-600">60%</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-700">Completed</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-blue-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-2xl font-bold text-blue-600">24</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-700">Lessons Done</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-purple-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-2xl font-bold text-purple-600">16</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-700">In Progress</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-orange-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                            <span class="text-2xl font-bold text-orange-600">8</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-700">Certificates</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Physics Lab Section -->
+    <section id="physics-lab" class="section-hidden container mx-auto px-4 py-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-4 shadow-lg">
+                    <i class="fas fa-atom text-white text-3xl"></i>
+                </div>
+                <h2 class="text-4xl font-bold gradient-text mb-4">Physics Lab</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Explore the fascinating world of physics through interactive experiments, simulations, and hands-on learning. 
+                    From classical mechanics to modern quantum physics, master the fundamental laws of nature.
+                </p>
+            </div>
+
+            <!-- Lab Categories Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <!-- Mechanics -->
+                <div onclick="openPhysicsModule('mechanics')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-cog text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Mechanics</h3>
+                    <p class="text-gray-600 text-sm mb-4">Forces, motion, energy, momentum, circular motion, gravitation</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">12 Experiments</span>
+                        <i class="fas fa-arrow-right text-blue-500"></i>
+                    </div>
+                </div>
+
+                <!-- Thermodynamics -->
+                <div onclick="openPhysicsModule('thermodynamics')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-temperature-high text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Thermodynamics</h3>
+                    <p class="text-gray-600 text-sm mb-4">Heat, temperature, laws of thermodynamics, entropy, heat engines</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">8 Experiments</span>
+                        <i class="fas fa-arrow-right text-red-500"></i>
+                    </div>
+                </div>
+
+                <!-- Electromagnetism -->
+                <div onclick="openPhysicsModule('electromagnetism')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-bolt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Electromagnetism</h3>
+                    <p class="text-gray-600 text-sm mb-4">Electric fields, magnetic fields, circuits, electromagnetic waves</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">10 Experiments</span>
+                        <i class="fas fa-arrow-right text-yellow-500"></i>
+                    </div>
+                </div>
+
+                <!-- Optics -->
+                <div onclick="openPhysicsModule('optics')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-lightbulb text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Optics</h3>
+                    <p class="text-gray-600 text-sm mb-4">Reflection, refraction, lenses, interference, diffraction, polarization</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">9 Experiments</span>
+                        <i class="fas fa-arrow-right text-green-500"></i>
+                    </div>
+                </div>
+
+                <!-- Modern Physics -->
+                <div onclick="openPhysicsModule('modern')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-atom text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Modern Physics</h3>
+                    <p class="text-gray-600 text-sm mb-4">Quantum mechanics, relativity, atomic structure, nuclear physics</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">7 Experiments</span>
+                        <i class="fas fa-arrow-right text-purple-500"></i>
+                    </div>
+                </div>
+
+                <!-- Waves & Sound -->
+                <div onclick="openPhysicsModule('waves')" class="feature-card glass-morphism rounded-2xl p-6 cursor-pointer hover:scale-105 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-wave-square text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Waves & Sound</h3>
+                    <p class="text-gray-600 text-sm mb-4">Wave properties, sound, resonance, Doppler effect, standing waves</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full">6 Experiments</span>
+                        <i class="fas fa-arrow-right text-indigo-500"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Virtual Lab Tools -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Virtual Lab Tools</h3>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="text-center p-4 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow">
+                        <i class="fas fa-calculator text-3xl text-blue-500 mb-3"></i>
+                        <h4 class="font-semibold">Calculator</h4>
+                    </div>
+                    <div class="text-center p-4 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow">
+                        <i class="fas fa-ruler text-3xl text-green-500 mb-3"></i>
+                        <h4 class="font-semibold">Measurement Tools</h4>
+                    </div>
+                    <div class="text-center p-4 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow">
+                        <i class="fas fa-chart-line text-3xl text-purple-500 mb-3"></i>
+                        <h4 class="font-semibold">Graph Plotter</h4>
+                    </div>
+                    <div class="text-center p-4 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow">
+                        <i class="fas fa-play text-3xl text-red-500 mb-3"></i>
+                        <h4 class="font-semibold">Simulations</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile" class="section-hidden container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">My Profile</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- User Info Card -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <i class="fas fa-user text-white text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Student User</h3>
+                        <p class="text-gray-600 mb-4">student@bharat.edu</p>
+                        <div class="bg-yellow-50 rounded-lg p-4">
+                            <p class="text-sm text-gray-600">Available Credits</p>
+                            <p class="text-2xl font-bold text-yellow-600" id="user-credits">500</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- My Listings -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4">My Listings</h3>
+                    <div id="my-listings" class="space-y-3">
+                        <p class="text-gray-500">No active listings</p>
+                    </div>
+                </div>
+                
+                <!-- Transaction History -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4">Transaction History</h3>
+                    <div id="transaction-history" class="space-y-3">
+                        <p class="text-gray-500">No transactions yet</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Credits Management -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+                <h3 class="text-xl font-semibold mb-4">Credits Management</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <button onclick="addCredits()" class="bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600">
+                        <i class="fas fa-plus mr-2"></i>Add Credits
+                    </button>
+                    <button onclick="viewCreditHistory()" class="bg-purple-500 text-white px-4 py-3 rounded-lg hover:bg-purple-600">
+                        <i class="fas fa-history mr-2"></i>Credit History
+                    </button>
+                    <button onclick="transferCredits()" class="bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600">
+                        <i class="fas fa-exchange-alt mr-2"></i>Transfer Credits
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lab Modal -->
+    <div id="lab-modal" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center z-50">
+        <div class="bg-white/95 backdrop-blur rounded-2xl max-w-5xl w-full mx-4 max-h-screen overflow-y-auto shadow-2xl">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 id="lab-title" class="text-3xl font-bold gradient-text"></h3>
+                    <div class="flex items-center space-x-3">
+                        <button onclick="closeLabModal()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i>Back
+                        </button>
+                        <button onclick="closeLabModal()" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
+                            <i class="fas fa-times text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="lab-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sell Book Modal -->
+    <div id="sell-book-modal" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center z-50">
+        <div class="bg-white/95 backdrop-blur rounded-2xl max-w-3xl w-full mx-4 max-h-screen overflow-y-auto shadow-2xl">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-plus text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold gradient-text">Sell Your Book</h3>
+                            <p class="text-sm text-gray-600">List your book for other students to purchase</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button onclick="closeSellBookModal()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i>Back
+                        </button>
+                        <button onclick="closeSellBookModal()" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
+                            <i class="fas fa-times text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+                <form id="sell-book-form" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Book Title *</label>
+                            <input type="text" id="book-title" required class="w-full px-4 py-3 bg-white/70 backdrop-blur border border-white/30 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500/20 transition-all" placeholder="Enter book title">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Author *</label>
+                            <input type="text" id="book-author" required class="w-full px-4 py-3 bg-white/70 backdrop-blur border border-white/30 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500/20 transition-all" placeholder="Enter author name">
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Category *</label>
+                            <select id="book-category" required class="w-full px-4 py-3 bg-white/70 backdrop-blur border border-white/30 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500/20 transition-all">
+                                <option value="">Select category</option>
+                                <option value="textbooks">Textbooks</option>
+                                <option value="novels">Novels</option>
+                                <option value="notes">Study Notes</option>
+                                <option value="reference">Reference Books</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Condition *</label>
+                            <select id="book-condition" required class="w-full px-4 py-3 bg-white/70 backdrop-blur border border-white/30 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500/20 transition-all">
+                                <option value="">Select condition</option>
+                                <option value="new">Like New</option>
+                                <option value="good">Good</option>
+                                <option value="fair">Fair</option>
+                                <option value="poor">Poor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Price (Credits) *</label>
+                            <input type="number" id="book-price" required min="1" class="w-full px-4 py-3 bg-white/70 backdrop-blur border border-white/30 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500/20 transition-all" placeholder="Enter price in credits">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Original Price (₹)</label>
+                            <input type="number" id="book-original-price" class="w-full px-4 py-3 bg-white/70 backdrop-blur border border-white/30 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500/20 transition-all" placeholder="Original MRP">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                        <textarea id="book-description" rows="4" class="w-full px-4 py-3 bg-white/70 backdrop-blur border border-white/30 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500/20 transition-all" placeholder="Describe your book's condition, highlights, etc."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Contact Method *</label>
+                        <select id="contact-method" required class="w-full px-4 py-3 bg-white/70 backdrop-blur border border-white/30 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500/20 transition-all">
+                            <option value="">Select contact method</option>
+                            <option value="chat">In-app Chat</option>
+                            <option value="email">Email</option>
+                            <option value="phone">Phone</option>
+                        </select>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button type="submit" class="btn-primary text-white px-8 py-3 rounded-full font-semibold shadow-lg">
+                            <i class="fas fa-list mr-2"></i>List Book
+                        </button>
+                        <button type="button" onclick="closeSellBookModal()" class="bg-gray-200 text-gray-700 px-8 py-3 rounded-full font-semibold hover:bg-gray-300 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

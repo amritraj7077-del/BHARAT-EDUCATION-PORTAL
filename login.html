@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Bharat Education Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dark-gradient: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.05" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,133.3C960,128,1056,96,1152,90.7C1248,85,1344,107,1392,117.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            top: 20%;
+            animation-delay: 0s;
+            border-radius: 50%;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            right: 15%;
+            top: 30%;
+            animation-delay: 2s;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            left: 70%;
+            bottom: 20%;
+            animation-delay: 4s;
+            border-radius: 50%;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-30px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(30px) rotate(240deg);
+            }
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            transform: translateY(-25px) scale(0.85);
+            color: #667eea;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            color: #9ca3af;
+            background: white;
+            padding: 0 4px;
+        }
+
+        .input-group input:focus ~ .input-icon,
+        .input-group input:not(:placeholder-shown) ~ .input-icon {
+            color: #667eea;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle {
+            cursor: pointer;
+        }
+
+        .error-message {
+            display: none;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .social-login-btn {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .social-login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .divider {
+            position: relative;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Floating Background Shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Login Container -->
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-md">
+            <!-- Logo and Brand -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4 shadow-lg">
+                    <i class="fas fa-graduation-cap text-white text-3xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold gradient-text mb-2">Bharat Education Portal</h1>
+                <p class="text-gray-600">Sign in to your account</p>
+            </div>
+
+            <!-- Login Form -->
+            <div class="glass-morphism rounded-2xl p-8">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <!-- Email Field -->
+                    <div class="mb-6">
+                        <div class="input-group">
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                placeholder=" "
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                required
+                            >
+                            <label for="email">Email Address</label>
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                        <div id="emailError" class="error-message text-red-500 text-sm mt-1">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            Please enter a valid email address
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-6">
+                        <div class="input-group">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                placeholder=" "
+                                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                required
+                            >
+                            <label for="password">Password</label>
+                            <i class="fas fa-eye input-icon password-toggle" onclick="togglePassword()"></i>
+                        </div>
+                        <div id="passwordError" class="error-message text-red-500 text-sm mt-1">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            Password must be at least 6 characters
+                        </div>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="flex items-center justify-between mb-6">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="remember" class="mr-2 rounded border-gray-300 text-blue-500 focus:ring-blue-500">
+                            <span class="text-sm text-gray-600">Remember me</span>
+                        </label>
+                        <a href="#" class="text-sm text-blue-600 hover:text-blue-800 transition-colors">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button 
+                        type="submit" 
+                        id="loginBtn"
+                        class="w-full btn-primary text-white py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mb-4"
+                    >
+                        <span id="loginBtnText">Sign In</span>
+                        <div id="loginSpinner" class="loading-spinner mx-auto hidden"></div>
+                    </button>
+
+                    <!-- Error Message -->
+                    <div id="loginError" class="error-message bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        <span id="loginErrorText">Invalid email or password</span>
+                    </div>
+                </form>
+
+                <!-- Social Login Divider -->
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <!-- Social Login Buttons -->
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <button onclick="handleGoogleLogin()" class="social-login-btn flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <i class="fab fa-google text-red-500 mr-2"></i>
+                        <span class="text-sm font-medium">Google</span>
+                    </button>
+                    <button class="social-login-btn flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <i class="fab fa-microsoft text-blue-600 mr-2"></i>
+                        <span class="text-sm font-medium">Microsoft</span>
+                    </button>
+                </div>
+
+                <!-- Sign Up Link -->
+                <div class="text-center">
+                    <p class="text-gray-600">
+                        Don't have an account? 
+                        <a href="signup.html" class="text-blue-600 hover:text-blue-800 font-semibold transition-colors">
+                            Sign up here
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Back to Home -->
+            <div class="text-center mt-6">
+                <a href="index.html" class="inline-flex items-center text-white hover:text-white/80 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Google OAuth Configuration
+        const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID_HERE'; // Replace with your actual Google Client ID
+        
+        // Form validation and submission
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            // Reset error messages
+            hideAllErrors();
+            
+            // Get form values
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            // Validate email
+            if (!validateEmail(email)) {
+                showError('emailError');
+                return;
+            }
+            
+            // Validate password
+            if (password.length < 6) {
+                showError('passwordError');
+                return;
+            }
+            
+            // Show loading state
+            showLoading();
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Demo credentials check
+                if (email === 'student@bharat.edu' && password === 'password123') {
+                    // Success - redirect to main page
+                    if (remember) {
+                        localStorage.setItem('rememberedEmail', email);
+                    }
+                    window.location.href = 'index.html';
+                } else {
+                    // Show error
+                    hideLoading();
+                    showLoginError('Invalid email or password. Try: student@bharat.edu / password123');
+                }
+            }, 1500);
+        }
+        
+        // Google OAuth Login
+        function handleGoogleLogin() {
+            if (GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') {
+                showLoginError('Google OAuth not configured. Please set up Google OAuth credentials first.');
+                showOAuthSetupInstructions();
+                return;
+            }
+            
+            // Initialize Google OAuth
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleGoogleCallback
+            });
+            
+            // Show Google Sign-In popup
+            google.accounts.id.prompt();
+        }
+        
+        // Handle Google OAuth callback
+        function handleGoogleCallback(response) {
+            showLoading();
+            
+            // Decode JWT token (for demo purposes)
+            try {
+                const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                const email = payload.email;
+                const name = payload.name;
+                
+                // Simulate successful login
+                setTimeout(() => {
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userName', name);
+                    localStorage.setItem('loginMethod', 'google');
+                    window.location.href = 'index.html';
+                }, 1000);
+            } catch (error) {
+                hideLoading();
+                showLoginError('Google login failed. Please try again.');
+            }
+        }
+        
+        // Show OAuth setup instructions
+        function showOAuthSetupInstructions() {
+            const instructions = document.createElement('div');
+            instructions.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            instructions.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-md w-full">
+                    <h3 class="text-lg font-bold mb-4">🔐 Google OAuth Setup Required</h3>
+                    <div class="text-sm text-gray-600 space-y-3">
+                        <p>To enable Google login, follow these steps:</p>
+                        <ol class="list-decimal list-inside space-y-2">
+                            <li>Go to <a href="https://console.cloud.google.com/" target="_blank" class="text-blue-600 underline">Google Cloud Console</a></li>
+                            <li>Create a new project or select existing one</li>
+                            <li>Enable "Google Identity Platform API"</li>
+                            <li>Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client IDs"</li>
+                            <li>Select "Web application" and add authorized origins:</li>
+                            <li class="ml-4 bg-gray-100 p-2 rounded">http://localhost:3000 or your domain</li>
+                            <li>Copy the Client ID and replace 'YOUR_GOOGLE_CLIENT_ID_HERE' in the code</li>
+                        </ol>
+                        <div class="bg-yellow-50 p-3 rounded">
+                            <p class="text-xs"><strong>Note:</strong> For demo purposes, you can use the regular login with: student@bharat.edu / password123</p>
+                        </div>
+                    </div>
+                    <button onclick="this.closest('.fixed').remove()" class="mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+                        Got it
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(instructions);
+        }
+        
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.password-toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+        
+        function showLoading() {
+            document.getElementById('loginBtnText').classList.add('hidden');
+            document.getElementById('loginSpinner').classList.remove('hidden');
+            document.getElementById('loginBtn').disabled = true;
+        }
+        
+        function hideLoading() {
+            document.getElementById('loginBtnText').classList.remove('hidden');
+            document.getElementById('loginSpinner').classList.add('hidden');
+            document.getElementById('loginBtn').disabled = false;
+        }
+        
+        function showError(errorId) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        function showLoginError(message) {
+            const errorElement = document.getElementById('loginError');
+            const errorText = document.getElementById('loginErrorText');
+            errorText.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        function hideAllErrors() {
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.style.display = 'none';
+            });
+        }
+        
+        // Load remembered email on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const rememberedEmail = localStorage.getItem('rememberedEmail');
+            if (rememberedEmail) {
+                document.getElementById('email').value = rememberedEmail;
+                document.getElementById('remember').checked = true;
+            }
+        });
+        
+        // Clear error on input
+        document.getElementById('email').addEventListener('input', () => {
+            document.getElementById('emailError').style.display = 'none';
+        });
+        
+        document.getElementById('password').addEventListener('input', () => {
+            document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('loginError').style.display = 'none';
+        });
+    </script>
+    
+    <!-- Google OAuth Script (only load if configured) -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</body>
+</html>
